@@ -153,10 +153,11 @@ public class JsonORCFileReaderWriterFactory implements FileReaderWriterFactory {
 
         @Override
         public void write(KeyValue keyValue) throws IOException {
-            rowIndex = batch.size++;
             VectorColumnFiller.fillRow(rowIndex, converters, schema, batch,
                     gson.fromJson(new String(keyValue.getValue()),
                             JsonObject.class));
+            
+            rowIndex = batch.size++;         
             if (batch.size == batch.getMaxSize()) {
                 writer.addRowBatch(batch);
                 batch.reset();
